@@ -57,16 +57,18 @@ public:
         }
         parameter->addObserver(this);
 
-        if(resources == nullptr) {
+        if(resources == nullptr && imageName != String::empty) {
             logger->writeToLog("Could not initialize component with NULL ResourceCache");
             return;
         }
-        imageStates = resources->get(imageName);
-        if(imageStates == nullptr) {
-            String message = "Could not find image resource for component: ";
-            message += imageName;
-            logger->writeToLog(message);
-            return;
+        else if(resources != nullptr) {
+            imageStates = resources->get(imageName);
+            if(imageStates == nullptr) {
+                String message = "Could not find image resource for component: ";
+                message += imageName;
+                logger->writeToLog(message);
+                return;
+            }
         }
     }
 
