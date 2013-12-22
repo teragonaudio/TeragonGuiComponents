@@ -36,6 +36,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "ImageKnobSmall.h"
 #include "ImageSlider.h"
 #include "IndicatorLight.h"
+#include "ParameterLabel.h"
 #include "PushButton.h"
 #include "ResourceCache.h"
 #include "StatusBar.h"
