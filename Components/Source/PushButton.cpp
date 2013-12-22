@@ -42,8 +42,8 @@ enabledOpacity(0.0f), stepRate(0.0f) {
 
 void PushButton::clicked() {
     ThinButton::clicked();
-    enabledOpacity = getToggleState() ? 0.0f : 1.0f;
-    stepRate = (getToggleState() ? 1.0f : -1.0f) * kFadeDurationStepRate;
+    enabledOpacity = getToggleState() ? 1.0f : 0.0f;
+    stepRate = (getToggleState() ? -1.0f : 1.0f) * kFadeDurationStepRate;
     startTimer(kAnimationTimerRateInMs);
 }
 
@@ -61,7 +61,7 @@ void PushButton::paint(Graphics &g) {
                 0, 0, buttonWidth, buttonHeight);
 
     if(enabledOpacity > 0.0f) {
-        if(enabledOpacity >= 1.0f) {
+        if(enabledOpacity > 1.0f) {
             enabledOpacity = 1.0f;
         }
         else if(enabledOpacity < 0.0f) {
