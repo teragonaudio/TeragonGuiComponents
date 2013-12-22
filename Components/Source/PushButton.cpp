@@ -30,12 +30,14 @@ namespace teragon {
 
 PushButton::PushButton(ThreadsafePluginParameterSet &parameters, const ParameterString &name,
                        const ResourceCache *resources) :
-ThinButton(parameters, name, resources, "push_button") {
+ThinButton(parameters, name, resources, "push_button"),
+enabledOpacity(0.0f), stepRate(0.0f) {
     enabledImage = imageStates->normal;
     disabledImage = imageStates->alternate;
     setClickingTogglesState(true);
     // Set initial button state
     setToggleState(isParameterEnabled(), NotificationType::dontSendNotification);
+    enabledOpacity = isParameterEnabled() ? 0.0f : 1.0f;
 }
 
 void PushButton::clicked() {
