@@ -53,6 +53,13 @@ void StatusBar::subscribeToParameters() {
     }
 }
 
+void StatusBar::ignoreParameter(const ParameterString &name) {
+    PluginParameter *parameter = parameters[name];
+    if(parameter != nullptr) {
+        parameter->removeObserver(this);
+    }
+}
+
 void StatusBar::resized() {
     Component::resized();
     const int labelHeight = (getHeight() - kPadding) / 2;

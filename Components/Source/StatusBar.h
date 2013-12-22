@@ -56,7 +56,18 @@ public:
 
     virtual void resized() override;
 
+    /**
+      * Iterate over the parameter set and subscribe to all parameters which have at least
+      * one PluginParameterComponent as an observer.
+      */
     virtual void subscribeToParameters();
+
+    /**
+      * Tell the status bar to ignore updates from the given parameters. This should be
+      * called after calling subscribeToParameters().
+      */
+    virtual void ignoreParameter(const ParameterString &name);
+
     virtual bool isRealtimePriority() const { return false; }
     virtual void onParameterUpdated(const PluginParameter *parameter);
 
