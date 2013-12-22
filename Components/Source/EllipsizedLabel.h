@@ -46,7 +46,6 @@ public:
 
     virtual ~EllipsizedLabel() {}
 
-
     virtual void setText(const String &newText) {
         // Minor optimization to save a lot of trouble below
         if(newText == String::empty) {
