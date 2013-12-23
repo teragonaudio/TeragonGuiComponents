@@ -40,7 +40,9 @@ namespace teragon {
 class ParameterLabel : public EllipsizedLabel, public PluginParameterComponent {
 public:
     ParameterLabel(ThreadsafePluginParameterSet &parameters, const ParameterString &name) :
-    EllipsizedLabel(), PluginParameterComponent(parameters, name, nullptr, String::empty) {}
+    EllipsizedLabel(), PluginParameterComponent(parameters, name, nullptr, String::empty) {
+        setText(parameter->getDisplayText());
+    }
 
     virtual ~ParameterLabel() {}
 
