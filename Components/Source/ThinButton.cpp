@@ -46,7 +46,7 @@ bool ThinButton::isParameterEnabled() const {
     return parameter->getScaledValue() > 0.5;
 }
 
-void ThinButton::onParameterUpdated(const PluginParameter* parameter) {
+void ThinButton::onParameterUpdated(const PluginParameter*) {
     juce::MessageManagerLock lock;
     setToggleState(isParameterEnabled(), NotificationType::dontSendNotification);
 }

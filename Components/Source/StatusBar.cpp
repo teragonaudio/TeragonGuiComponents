@@ -29,7 +29,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace teragon {
 
-StatusBar::StatusBar(ThreadsafePluginParameterSet &parameters, const ResourceCache *resources) :
+StatusBar::StatusBar(ThreadsafePluginParameterSet &parameters, const ResourceCache*) :
 juce::Component(),
 PluginParameterObserver(),
 parameters(parameters), labelOpacity(1.0), clearTimeout(0) {
@@ -38,11 +38,11 @@ parameters(parameters), labelOpacity(1.0), clearTimeout(0) {
 }
 
 void StatusBar::subscribeToParameters() {
-    for(int i = 0; i < parameters.size(); ++i) {
+    for(size_t i = 0; i < parameters.size(); ++i) {
         PluginParameter *parameter = parameters[i];
         // Only update the parameter if it has at least one other component listening to it. Otherwise
         // we risk showing a bunch of internal parameters which we may not want to expose.
-        for(unsigned int j = 0; j < parameter->getNumObservers(); ++j) {
+        for(size_t j = 0; j < parameter->getNumObservers(); ++j) {
             PluginParameterObserver *observer = parameter->getObserver(j);
             PluginParameterComponent *component = dynamic_cast<PluginParameterComponent*>(observer);
             if(observer != this && component != nullptr) {
@@ -70,7 +70,7 @@ void StatusBar::resized() {
 }
 
 const Font StatusBar::getFont() {
-    return Font(Font::getDefaultMonospacedFontName(), kFontSize, Font::plain);
+    return Font(Font::getDefaultMonospacedFontName(), (float)kFontSize, Font::plain);
 }
 
 void StatusBar::configureLabelProperties(Label &label) {
@@ -79,7 +79,7 @@ void StatusBar::configureLabelProperties(Label &label) {
 }
 
 StatusBar::~StatusBar() {
-    for(int i = 0; i < parameters.size(); ++i) {
+    for(size_t i = 0; i < parameters.size(); ++i) {
         parameters[i]->removeObserver(this);
     }
 }

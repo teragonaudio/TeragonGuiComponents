@@ -46,19 +46,18 @@ public:
                              const ResourceCache *resources, const String &imageName) :
     PluginParameterObserver(),
     parameters(parameters), parameter(nullptr), imageStates(nullptr), observer(nullptr) {
-        Logger *logger = Logger::getCurrentLogger();
-
         parameter = parameters[name];
         if(parameter == nullptr) {
             String message = "Could not bind component to parameter: ";
             message += name.c_str();
-            logger->writeToLog(message);
+            Logger::getCurrentLogger()->writeToLog(message);
             return;
         }
         parameter->addObserver(this);
 
         if(resources == nullptr && imageName != String::empty) {
-            logger->writeToLog("Could not initialize component with NULL ResourceCache");
+          String message = "Could not initialize component with NULL ResourceCache";
+          Logger::getCurrentLogger()->writeToLog(message);
             return;
         }
         else if(resources != nullptr) {
@@ -66,7 +65,7 @@ public:
             if(imageStates == nullptr) {
                 String message = "Could not find image resource for component: ";
                 message += imageName;
-                logger->writeToLog(message);
+                Logger::getCurrentLogger()->writeToLog(message);
                 return;
             }
         }
@@ -98,6 +97,10 @@ public:
             observer->onParameterUpdated(parameter);
         }
     }
+
+private:
+    // Disallow assignment operator
+    PluginParameterComponent& operator=(const PluginParameterComponent&) {}
 
 protected:
     ThreadsafePluginParameterSet &parameters;
