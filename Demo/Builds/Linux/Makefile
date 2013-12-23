@@ -49,7 +49,6 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
-  $(OBJDIR)/tinythread_6bd985d.o \
   $(OBJDIR)/ImageKnob_4bdd143c.o \
   $(OBJDIR)/ImageSlider_9bc0d0e7.o \
   $(OBJDIR)/IndicatorLight_e0f6b1a6.o \
@@ -60,6 +59,7 @@ OBJECTS := \
   $(OBJDIR)/ThinButton_a1e978a.o \
   $(OBJDIR)/MainComponent_a6ffb4a5.o \
   $(OBJDIR)/Main_90ebc5c2.o \
+  $(OBJDIR)/tinythread_6bd985d.o \
   $(OBJDIR)/juce_core_aff681cc.o \
   $(OBJDIR)/juce_data_structures_bdd6d488.o \
   $(OBJDIR)/juce_events_79b2840.o \
@@ -85,11 +85,6 @@ clean:
 strip:
 	@echo Stripping ComponentDemo
 	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
-
-$(OBJDIR)/tinythread_6bd985d.o: ../../../Components/PluginParameters/include/tinythread/source/tinythread.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling tinythread.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/ImageKnob_4bdd143c.o: ../../../Components/Source/ImageKnob.cpp
 	-@mkdir -p $(OBJDIR)
@@ -139,6 +134,11 @@ $(OBJDIR)/MainComponent_a6ffb4a5.o: ../../Source/MainComponent.cpp
 $(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/tinythread_6bd985d.o: ../../../Components/PluginParameters/include/tinythread/source/tinythread.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling tinythread.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/juce_core_aff681cc.o: ../../JuceLibraryCode/modules/juce_core/juce_core.cpp

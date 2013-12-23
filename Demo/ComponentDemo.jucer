@@ -4,9 +4,6 @@
               bundleIdentifier="com.teragonaudio.ComponentDemo" includeBinaryInAppConfig="1"
               jucerVersion="3.1.0" companyName="Teragon Audio">
   <MAINGROUP id="qYaJjs" name="ComponentDemo">
-    <GROUP id="{E04A37AC-9529-254B-4E46-C1FC485B5238}" name="Tinythread">
-      <FILE id="f51QW9" name="tinythread.cpp" compile="1" resource="0" file="../Components/PluginParameters/include/tinythread/source/tinythread.cpp"/>
-    </GROUP>
     <GROUP id="{08B3F7AA-BD19-0DE8-C8BE-79CDEB3F6DE5}" name="Components">
       <FILE id="FYpnOS" name="AnimationConstants.h" compile="0" resource="0"
             file="../Components/Source/AnimationConstants.h"/>
@@ -41,11 +38,53 @@
       <FILE id="wmzTJQ" name="ThinButton.h" compile="0" resource="0" file="../Components/Source/ThinButton.h"/>
       <FILE id="QRxYDb" name="ToggleButton.h" compile="0" resource="0" file="../Components/Source/ToggleButton.h"/>
     </GROUP>
+    <GROUP id="{2E3DD42B-E9FC-81C4-4DBB-29556DEEFD32}" name="PluginParameters">
+      <GROUP id="{28AA07BB-3101-A26D-A785-CAF745BA0852}" name="include">
+        <FILE id="QBegoL" name="BooleanParameter.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/BooleanParameter.h"/>
+        <FILE id="GMginL" name="DecibelParameter.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/DecibelParameter.h"/>
+        <FILE id="xUoOfn" name="Event.h" compile="0" resource="0" file="../Components/PluginParameters/include/Event.h"/>
+        <FILE id="JrSUfh" name="EventDispatcher.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/EventDispatcher.h"/>
+        <FILE id="SuYkb5" name="FloatParameter.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/FloatParameter.h"/>
+        <FILE id="TLlIqq" name="FrequencyParameter.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/FrequencyParameter.h"/>
+        <FILE id="IQLPR8" name="IntegerParameter.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/IntegerParameter.h"/>
+        <FILE id="l61QrI" name="PluginParameter.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/PluginParameter.h"/>
+        <FILE id="Y8Qcv4" name="PluginParameters.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/PluginParameters.h"/>
+        <FILE id="lSoVvf" name="PluginParameterSet.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/PluginParameterSet.h"/>
+        <GROUP id="{2562E47E-50BE-8A39-5D27-6B30D2C629B2}" name="readerwriterqueue">
+          <FILE id="kKe5F2" name="atomicops.h" compile="0" resource="0" file="../Components/PluginParameters/include/readerwriterqueue/atomicops.h"/>
+          <FILE id="a2Euig" name="readerwriterqueue.h" compile="0" resource="0"
+                file="../Components/PluginParameters/include/readerwriterqueue/readerwriterqueue.h"/>
+        </GROUP>
+        <FILE id="TJ2PTg" name="StringParameter.h" compile="0" resource="0"
+              file="../Components/PluginParameters/include/StringParameter.h"/>
+        <FILE id="RtH6lp" name="ThreadsafePluginParameterSet.h" compile="0"
+              resource="0" file="../Components/PluginParameters/include/ThreadsafePluginParameterSet.h"/>
+        <GROUP id="{6531DFE8-73CB-CEE2-3437-ADFBF8503A09}" name="tinythread">
+          <GROUP id="{3FD02DCD-E938-7B2A-3ABD-E1DD0EE86CFC}" name="source">
+            <FILE id="DA9iXh" name="fast_mutex.h" compile="0" resource="0" file="../Components/PluginParameters/include/tinythread/source/fast_mutex.h"/>
+            <FILE id="iN85c3" name="tinythread.h" compile="0" resource="0" file="../Components/PluginParameters/include/tinythread/source/tinythread.h"/>
+          </GROUP>
+        </GROUP>
+        <FILE id="XbvA18" name="VoidParameter.h" compile="0" resource="0" file="../Components/PluginParameters/include/VoidParameter.h"/>
+      </GROUP>
+    </GROUP>
     <GROUP id="{13E73132-5C03-0A9B-8CCB-8D2002B834C6}" name="Source">
       <FILE id="MNx6Lt" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="k3hrhP" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="C2q2Sk" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+    <GROUP id="{E04A37AC-9529-254B-4E46-C1FC485B5238}" name="Tinythread">
+      <FILE id="f51QW9" name="tinythread.cpp" compile="1" resource="0" file="../Components/PluginParameters/include/tinythread/source/tinythread.cpp"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
@@ -94,6 +133,24 @@
         <MODULEPATH id="juce_core" path="../../juce"/>
       </MODULEPATHS>
     </XCODE_MAC>
+    <VS2013 targetFolder="Builds/VisualStudio2013" extraDefs="ENABLE_MULTITHREADED=1 WINAPI=1"
+            extraCompilerFlags="/I ../../../Components/Source /I../../PluginParameters/include">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="ComponentDemo"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="ComponentDemo"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_gui_audio" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+      </MODULEPATHS>
+    </VS2013>
   </EXPORTFORMATS>
   <JUCEOPTIONS/>
 </JUCERPROJECT>
