@@ -54,6 +54,8 @@ public:
     StatusBar(ThreadsafePluginParameterSet &parameters, const ResourceCache *resources);
     virtual ~StatusBar();
 
+    static const Font getFont();
+
     virtual void resized() override;
 
     /**

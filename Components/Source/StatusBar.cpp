@@ -69,9 +69,13 @@ void StatusBar::resized() {
     configureLabelProperties(parameterValueLabel);
 }
 
+const Font StatusBar::getFont() {
+    return Font(Font::getDefaultMonospacedFontName(), kFontSize, Font::plain);
+}
+
 void StatusBar::configureLabelProperties(Label &label) {
     label.setColour(Label::textColourId, Colours::black);
-    label.setFont(Font(Font::getDefaultMonospacedFontName(), kFontSize, Font::plain));
+    label.setFont(getFont());
 }
 
 StatusBar::~StatusBar() {
