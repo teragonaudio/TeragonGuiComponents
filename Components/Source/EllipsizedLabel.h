@@ -63,7 +63,7 @@ public:
         // this. Basically we keep subtracting characters from the string, appending the
         // ellipsis character, and then measuring how large the resulting string would be.
         // If it can fit in the Label's bounds, then that's the string we want to set.
-        while(renderedTextWidth >= maxWidth && truncateAtIndex > 0) {
+        while(maxWidth > 0 && renderedTextWidth >= maxWidth && truncateAtIndex > 0) {
             --truncateAtIndex;
             // If the last character is a space, then skip it. Otherwise the result will be
             // a string that looks like "long example string …", which should instead look
