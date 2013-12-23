@@ -4,6 +4,7 @@ Demo/Builds/Linux/nbproject/*
 Demo/Builds/MacOSX/.idea/*
 Demo/Builds/MacOSX/RecentFilesMenuTemplate.nib
 Demo/Builds/MacOSX/build/*
+project.xcworkspace
 workspace.xml
 
 # Android temp stuff
