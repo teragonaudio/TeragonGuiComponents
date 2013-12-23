@@ -66,7 +66,7 @@ public:
     virtual void paint(Graphics &g);
 
 private:
-    Rectangle<int> knobArea;
+    juce::Rectangle<int> knobArea;
     int knobWidth;
     double filmstripImageCount;
 };
