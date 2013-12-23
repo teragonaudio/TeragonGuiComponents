@@ -51,6 +51,12 @@ public:
         parameters.add(new VoidParameter("Toggle Button"));
         parameters.add(new BooleanParameter("Push Button"));
         mainWindow = new MainWindow(parameters);
+
+        // Create a runloop for processing realtime events. When using the
+        // components in a plugin, you don't need to do this, instead you
+        // should call processRealtimeEvents() in the plugin's process
+        // callback (ie, processBlock() for Juce plugins, processReplacing()
+        // for regular VSTs).
         startTimer(33); // ~30fps
     }
 
