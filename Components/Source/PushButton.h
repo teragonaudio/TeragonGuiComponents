@@ -46,7 +46,10 @@ public:
         return getToggleState() ? getDownImage() : getNormalImage();
     }
 
+    virtual void onParameterUpdated(const PluginParameter *parameter);
+
     virtual void clicked();
+    virtual void postClicked();
     virtual void paint(Graphics &g);
 
     virtual void timerCallback();

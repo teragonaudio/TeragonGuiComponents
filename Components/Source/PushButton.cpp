@@ -40,8 +40,17 @@ enabledOpacity(0.0f), stepRate(0.0f) {
     enabledOpacity = isParameterEnabled() ? 0.0f : 1.0f;
 }
 
+void PushButton::onParameterUpdated(const PluginParameter *parameter) {
+    ThinButton::onParameterUpdated(parameter);
+    postClicked();
+}
+
 void PushButton::clicked() {
     ThinButton::clicked();
+    postClicked();
+}
+
+void PushButton::postClicked() {
     enabledOpacity = getToggleState() ? 1.0f : 0.0f;
     stepRate = (getToggleState() ? -1.0f : 1.0f) * kFadeDurationStepRate;
     startTimer(kAnimationTimerRateInMs);
