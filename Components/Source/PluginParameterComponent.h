@@ -100,7 +100,7 @@ public:
 
 private:
     // Disallow assignment operator
-    PluginParameterComponent& operator=(const PluginParameterComponent&) {}
+    PluginParameterComponent& operator=(const PluginParameterComponent&) { return *this; }
 
 protected:
     ThreadsafePluginParameterSet &parameters;
