@@ -37,7 +37,7 @@ namespace teragon {
 */
 class PushButton : public ThinButton, public Timer {
 public:
-    PushButton(ThreadsafePluginParameterSet &parameters, const ParameterString &name,
+    PushButton(ConcurrentParameterSet &parameters, const ParameterString &name,
                const ResourceCache *resources);
 
     virtual ~PushButton() {}
@@ -46,7 +46,7 @@ public:
         return getToggleState() ? getDownImage() : getNormalImage();
     }
 
-    virtual void onParameterUpdated(const PluginParameter *parameter);
+    virtual void onParameterUpdated(const Parameter *parameter);
 
     virtual void clicked();
     virtual void postClicked();

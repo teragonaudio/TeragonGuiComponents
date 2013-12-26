@@ -39,14 +39,14 @@ namespace teragon {
 */
 class ParameterLabel : public EllipsizedLabel, public PluginParameterComponent {
 public:
-    ParameterLabel(ThreadsafePluginParameterSet &parameters, const ParameterString &name) :
+    ParameterLabel(ConcurrentParameterSet &parameters, const ParameterString &name) :
     EllipsizedLabel(), PluginParameterComponent(parameters, name, nullptr, String::empty) {
         setText(parameter->getDisplayText());
     }
 
     virtual ~ParameterLabel() {}
 
-    virtual void onParameterUpdated(const PluginParameter *parameter) {
+    virtual void onParameterUpdated(const Parameter *parameter) {
         juce::MessageManagerLock lock;
         setText(parameter->getDisplayText());
     }

@@ -29,9 +29,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace teragon {
 
-StatusBar::StatusBar(ThreadsafePluginParameterSet &parameters, const ResourceCache*) :
-juce::Component(),
-PluginParameterObserver(),
+StatusBar::StatusBar(ConcurrentParameterSet &parameters, const ResourceCache*) :
+juce::Component(), juce::Timer(), ParameterObserver(),
 parameters(parameters), labelOpacity(1.0), clearTimeout(0) {
     addAndMakeVisible(&parameterNameLabel);
     addAndMakeVisible(&parameterValueLabel);
@@ -39,11 +38,11 @@ parameters(parameters), labelOpacity(1.0), clearTimeout(0) {
 
 void StatusBar::subscribeToParameters() {
     for(size_t i = 0; i < parameters.size(); ++i) {
-        PluginParameter *parameter = parameters[i];
+        Parameter *parameter = parameters[i];
         // Only update the parameter if it has at least one other component listening to it. Otherwise
         // we risk showing a bunch of internal parameters which we may not want to expose.
         for(size_t j = 0; j < parameter->getNumObservers(); ++j) {
-            PluginParameterObserver *observer = parameter->getObserver(j);
+            ParameterObserver *observer = parameter->getObserver(j);
             PluginParameterComponent *component = dynamic_cast<PluginParameterComponent*>(observer);
             if(observer != this && component != nullptr) {
                 parameter->addObserver(this);
@@ -54,7 +53,7 @@ void StatusBar::subscribeToParameters() {
 }
 
 void StatusBar::ignoreParameter(const ParameterString &name) {
-    PluginParameter *parameter = parameters[name];
+    Parameter *parameter = parameters[name];
     if(parameter != nullptr) {
         parameter->removeObserver(this);
     }
@@ -84,12 +83,12 @@ StatusBar::~StatusBar() {
     }
 }
 
-void StatusBar::onParameterUpdated(const PluginParameter *parameter) {
+void StatusBar::onParameterUpdated(const Parameter *parameter) {
     juce::MessageManagerLock lock;
     displayParameter(parameter);
 }
 
-void StatusBar::displayParameter(const PluginParameter *parameter) {
+void StatusBar::displayParameter(const Parameter *parameter) {
     parameterNameLabel.setText(parameter->getName());
     parameterValueLabel.setText(parameter->getDisplayText());
 

@@ -57,11 +57,11 @@ namespace teragon {
 */
 class ImageKnob : public juce::Slider, public PluginParameterComponent {
 public:
-    ImageKnob(ThreadsafePluginParameterSet &parameters, const ParameterString &name,
+    ImageKnob(ConcurrentParameterSet &parameters, const ParameterString &name,
               const ResourceCache *resources, const String &imageName);
     virtual ~ImageKnob() {}
 
-    virtual void onParameterUpdated(const PluginParameter* parameter);
+    virtual void onParameterUpdated(const Parameter* parameter);
     virtual void valueChanged();
     virtual void paint(Graphics &g);
 

@@ -38,13 +38,13 @@ namespace teragon {
 /**
 * Base class for all TeragonGuiComponents widgets. Basically handles the
 * process of observing a parameter and sending updates to that parameter
-* on an associated ThreadsafePluginParameterSet.
+* on an associated ConcurrentParameterSet.
 */
-class PluginParameterComponent : public PluginParameterObserver {
+class PluginParameterComponent : public ParameterObserver {
 public:
-    PluginParameterComponent(ThreadsafePluginParameterSet &parameters, const ParameterString &name,
+    PluginParameterComponent(ConcurrentParameterSet &parameters, const ParameterString &name,
                              const ResourceCache *resources, const String &imageName) :
-    PluginParameterObserver(),
+    ParameterObserver(),
     parameters(parameters), parameter(nullptr), imageStates(nullptr), observer(nullptr) {
         parameter = parameters[name];
         if(parameter == nullptr) {
@@ -88,7 +88,7 @@ public:
         parameters.setScaled(parameter, value, this);
     }
 
-    virtual void setStatusObserver(PluginParameterObserver *observer) {
+    virtual void setStatusObserver(ParameterObserver *observer) {
         this->observer = observer;
     }
 
@@ -103,10 +103,10 @@ private:
     PluginParameterComponent& operator=(const PluginParameterComponent&) { return *this; }
 
 protected:
-    ThreadsafePluginParameterSet &parameters;
-    PluginParameter *parameter;
+    ConcurrentParameterSet &parameters;
+    Parameter *parameter;
     ResourceCache::ImageStates *imageStates;
-    PluginParameterObserver *observer;
+    ParameterObserver *observer;
 };
 
 } // namespace teragon

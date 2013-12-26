@@ -29,7 +29,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "JuceHeader.h"
 #include "EllipsizedLabel.h"
 #include "ResourceCache.h"
-#include "../PluginParameters/include/ThreadsafePluginParameterSet.h"
+#include "../PluginParameters/include/PluginParameters.h"
 
 namespace teragon {
 
@@ -49,9 +49,9 @@ namespace teragon {
 * register itself as an observer there as well so that the current parameter
 * value can be shown without having to alter the value.
 */
-class StatusBar : public juce::Component, public juce::Timer, public PluginParameterObserver {
+class StatusBar : public juce::Component, public juce::Timer, public ParameterObserver {
 public:
-    StatusBar(ThreadsafePluginParameterSet &parameters, const ResourceCache *resources);
+    StatusBar(ConcurrentParameterSet &parameters, const ResourceCache *resources);
     virtual ~StatusBar();
 
     static const Font getFont();
@@ -71,9 +71,9 @@ public:
     virtual void ignoreParameter(const ParameterString &name);
 
     virtual bool isRealtimePriority() const { return false; }
-    virtual void onParameterUpdated(const PluginParameter *parameter);
+    virtual void onParameterUpdated(const Parameter *parameter);
 
-    virtual void displayParameter(const PluginParameter *parameter);
+    virtual void displayParameter(const Parameter *parameter);
     virtual void timerCallback();
 
 protected:
@@ -88,7 +88,7 @@ private:
     EllipsizedLabel parameterNameLabel;
     EllipsizedLabel parameterValueLabel;
 
-    ThreadsafePluginParameterSet &parameters;
+    ConcurrentParameterSet &parameters;
 
     float labelOpacity;
     float clearTimeout;

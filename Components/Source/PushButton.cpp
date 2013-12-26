@@ -28,7 +28,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace teragon {
 
-PushButton::PushButton(ThreadsafePluginParameterSet &parameters, const ParameterString &name,
+PushButton::PushButton(ConcurrentParameterSet &parameters, const ParameterString &name,
                        const ResourceCache *resources) :
 ThinButton(parameters, name, resources, "push_button"),
 enabledOpacity(0.0f), stepRate(0.0f) {
@@ -40,7 +40,7 @@ enabledOpacity(0.0f), stepRate(0.0f) {
     enabledOpacity = isParameterEnabled() ? 0.0f : 1.0f;
 }
 
-void PushButton::onParameterUpdated(const PluginParameter *parameter) {
+void PushButton::onParameterUpdated(const Parameter *parameter) {
     ThinButton::onParameterUpdated(parameter);
     postClicked();
 }

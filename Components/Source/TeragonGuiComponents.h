@@ -26,10 +26,6 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef __TERAGONGUICOMPONENTS_H__
 #define __TERAGONGUICOMPONENTS_H__
 
-#ifndef ENABLE_MULTITHREADED
-#define ENABLE_MULTITHREADED 1
-#endif
-
 #include "../PluginParameters/include/PluginParameters.h"
 
 #include "ImageKnobLarge.h"
