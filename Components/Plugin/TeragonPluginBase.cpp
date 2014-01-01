@@ -9,10 +9,15 @@
 */
 
 #include "TeragonPluginBase.h"
+#include "Base64.h"
 
 namespace teragon {
 
+// Constructor /////////////////////////////////////////////////////////////////
+
 TeragonPluginBase::TeragonPluginBase() {
+    // Start with the parameter set paused, in case the plugin is created before
+    // playback starts.
     parameters.pause();
 }
 
@@ -84,14 +89,92 @@ bool TeragonPluginBase::isMetaParameter(int index) const {
 // State save/restore //////////////////////////////////////////////////////////
 
 void TeragonPluginBase::getStateInformation(MemoryBlock &destData) {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    // Save all parameters in the set, handling string/blob/numeric types with
+    // correct serialization to XML.
+    XmlElement xml(getName());
+    for(size_t i = 0; i < parameters.size(); ++i) {
+        Parameter *parameter = parameters[i];
+        const String attributeName = parameter->getSafeName();
+        // Do not serialize the version parameter, it must be set by the plugin
+        // and not overridden
+        if(attributeName == "Version") {
+            continue;
+        }
+
+        if(dynamic_cast<StringParameter *>(parameter) != nullptr) {
+            // Convert parameter strings to juce strings
+            const String value = parameter->getDisplayText();
+            xml.setAttribute(attributeName, value);
+        }
+        else if(dynamic_cast<BlobParameter *>(parameter) != nullptr) {
+            // Use base64 encoding for binary blob data
+            BlobParameter *blobParameter = dynamic_cast<BlobParameter *>(parameter);
+            size_t blobSize = blobParameter->getDataSize();
+            char *encodedBlob = new char[base64_enc_len(blobSize)];
+            base64_encode(encodedBlob, (char*)blobParameter->getData(), blobSize);
+            xml.setAttribute(attributeName, encodedBlob);
+            delete [] encodedBlob;
+        }
+        else if(dynamic_cast<IntegerParameter *>(parameter) != nullptr) {
+            // Serialize integer parameters with the proper call
+            xml.setAttribute(attributeName, (int)parameter->getValue());
+        }
+        else if(dynamic_cast<VoidParameter *>(parameter) != nullptr) {
+            // Skip void parameters, these don't contain any interesting values
+            continue;
+        }
+        else {
+            // All other parameters can be serialized as doubles
+            xml.setAttribute(attributeName, (double)parameter->getValue());
+        }
+    }
+
+    // Save XML data to disk (via the host, that is)
+    copyXmlToBinary(xml, destData);
 }
 
 void TeragonPluginBase::setStateInformation(const void *data, int sizeInBytes) {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    // Restore parameter values from serialized XML state
+    ScopedPointer<XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+    if(xmlState != 0 && xmlState->hasTagName(getName())) {
+        for(size_t i = 0; i < parameters.size(); i++) {
+            Parameter *parameter = parameters[i];
+            const String attributeName = parameter->getSafeName();
+            // Check to make sure that this parameter exists in the saved XML state. We
+            // could run into problems when a newer version of this plugin introduces new
+            // parameters which may not necessarily exist in saved documents from older
+            // versions. In such cases, these new parameters will retain their default
+            // values.
+            if(xmlState->hasAttribute(attributeName)) {
+                if(dynamic_cast<StringParameter *>(parameter) != nullptr) {
+                    // Convert juce strings to binary data events
+                    juce::String value = xmlState->getStringAttribute(attributeName);
+                    parameters.setData(parameter, value.toStdString().c_str(),
+                                       (const size_t)value.length());
+                }
+                else if(dynamic_cast<BlobParameter *>(parameter) != nullptr) {
+                    // Base64 decode the serialized string to binary blob data
+                    juce::String value = xmlState->getStringAttribute(attributeName);
+                    char *rawValue = const_cast<char *>(value.toRawUTF8());
+                    char *blob = new char[base64_dec_len(rawValue, value.length())];
+                    int blobSize = base64_decode(blob, rawValue, value.length());
+                    parameters.setData(parameter, blob, (const size_t)blobSize);
+                    delete [] blob;
+                }
+                else if(dynamic_cast<IntegerParameter *>(parameter) != nullptr) {
+                    // Treat integer parameters as real integers
+                    parameters.set(parameter, xmlState->getIntAttribute(attributeName));
+                }
+                else {
+                    // Everything else can be handled as a double
+                    parameters.set(parameter, xmlState->getDoubleAttribute(attributeName));
+                }
+            }
+        }
+
+        // Force parameters to be applied immediately
+        parameters.processRealtimeEvents();
+    }
 }
 
 } // namespace teragon

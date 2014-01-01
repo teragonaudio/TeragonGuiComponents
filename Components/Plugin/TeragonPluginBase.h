@@ -18,6 +18,7 @@ namespace teragon {
 
 class TeragonPluginBase : public AudioProcessor {
 public:
+    // Constructor /////////////////////////////////////////////////////////////////
     TeragonPluginBase();
     virtual ~TeragonPluginBase() {}
 
@@ -34,8 +35,8 @@ public:
     virtual bool isOutputChannelStereoPair(int index) const { return true; }
     virtual bool silenceInProducesSilenceOut() const { return true; }
     virtual double getTailLengthSeconds() const { return 0.0; }
-    virtual const String getInputChannelName(int index) const { return String(index + 1); }
-    virtual const String getOutputChannelName(int index) const { return String(index + 1); }
+    virtual const String getInputChannelName(int i) const { return String(i + 1); }
+    virtual const String getOutputChannelName(int i) const { return String(i + 1); }
 
     // Editor //////////////////////////////////////////////////////////////////////
     virtual AudioProcessorEditor *createEditor() = 0;
