@@ -9,7 +9,7 @@
 */
 
 #include "TeragonPluginBase.h"
-#include "Base64.h"
+#include "arduino-base64/Base64.h"
 
 namespace teragon {
 
