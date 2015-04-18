@@ -96,15 +96,27 @@ public:
         outlineColourId         = 0x1001c10     /**< The colour to use to draw an outline around the tooltip. */
     };
 
+    //==============================================================================
+    /** This abstract base class is implemented by LookAndFeel classes to provide
+        window drawing functionality.
+    */
+    struct JUCE_API  LookAndFeelMethods
+    {
+        virtual ~LookAndFeelMethods() {}
+
+        virtual void getTooltipSize (const String& tipText, int& width, int& height) = 0;
+        virtual void drawTooltip (Graphics&, const String& text, int width, int height) = 0;
+    };
 
 private:
     //==============================================================================
-    int millisecondsBeforeTipAppears;
-    Point<int> lastMousePos;
-    int mouseClicks, mouseWheelMoves;
-    unsigned int lastCompChangeTime, lastHideTime;
+    Point<float> lastMousePos;
     Component* lastComponentUnderMouse;
     String tipShowing, lastTipUnderMouse;
+    int millisecondsBeforeTipAppears;
+    int mouseClicks, mouseWheelMoves;
+    unsigned int lastCompChangeTime, lastHideTime;
+    bool reentrant;
 
     void paint (Graphics&) override;
     void mouseEnter (const MouseEvent&) override;

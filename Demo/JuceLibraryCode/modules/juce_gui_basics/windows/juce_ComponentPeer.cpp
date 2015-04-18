@@ -79,26 +79,28 @@ void ComponentPeer::updateBounds()
     setBounds (ScalingHelpers::scaledScreenPosToUnscaled (component, component.getBoundsInParent()), false);
 }
 
+bool ComponentPeer::isKioskMode() const
+{
+    return Desktop::getInstance().getKioskModeComponent() == &component;
+}
+
 //==============================================================================
-void ComponentPeer::handleMouseEvent (const int touchIndex, const Point<int> positionWithinPeer,
-                                      const ModifierKeys newMods, const int64 time)
+void ComponentPeer::handleMouseEvent (int touchIndex, Point<float> pos, ModifierKeys newMods, int64 time)
 {
     if (MouseInputSource* mouse = Desktop::getInstance().mouseSources->getOrCreateMouseInputSource (touchIndex))
-        MouseInputSource (*mouse).handleEvent (*this, positionWithinPeer, time, newMods);
+        MouseInputSource (*mouse).handleEvent (*this, pos, time, newMods);
 }
 
-void ComponentPeer::handleMouseWheel (const int touchIndex, const Point<int> positionWithinPeer,
-                                      const int64 time, const MouseWheelDetails& wheel)
+void ComponentPeer::handleMouseWheel (int touchIndex, Point<float> pos, int64 time, const MouseWheelDetails& wheel)
 {
     if (MouseInputSource* mouse = Desktop::getInstance().mouseSources->getOrCreateMouseInputSource (touchIndex))
-        MouseInputSource (*mouse).handleWheel (*this, positionWithinPeer, time, wheel);
+        MouseInputSource (*mouse).handleWheel (*this, pos, time, wheel);
 }
 
-void ComponentPeer::handleMagnifyGesture (const int touchIndex, const Point<int> positionWithinPeer,
-                                          const int64 time, const float scaleFactor)
+void ComponentPeer::handleMagnifyGesture (int touchIndex, Point<float> pos, int64 time, float scaleFactor)
 {
     if (MouseInputSource* mouse = Desktop::getInstance().mouseSources->getOrCreateMouseInputSource (touchIndex))
-        MouseInputSource (*mouse).handleMagnifyGesture (*this, positionWithinPeer, time, scaleFactor);
+        MouseInputSource (*mouse).handleMagnifyGesture (*this, pos, time, scaleFactor);
 }
 
 //==============================================================================
@@ -118,9 +120,14 @@ void ComponentPeer::handlePaint (LowLevelGraphicsContext& contextToPaintTo)
         g.addTransform (AffineTransform::scale (peerBounds.getWidth()  / (float) component.getWidth(),
                                                 peerBounds.getHeight() / (float) component.getHeight()));
 
-   #if JUCE_ENABLE_REPAINT_DEBUGGING
-    g.saveState();
+  #if JUCE_ENABLE_REPAINT_DEBUGGING
+   #ifdef JUCE_IS_REPAINT_DEBUGGING_ACTIVE
+    if (JUCE_IS_REPAINT_DEBUGGING_ACTIVE)
    #endif
+    {
+        g.saveState();
+    }
+  #endif
 
     JUCE_TRY
     {
@@ -128,18 +135,23 @@ void ComponentPeer::handlePaint (LowLevelGraphicsContext& contextToPaintTo)
     }
     JUCE_CATCH_EXCEPTION
 
-   #if JUCE_ENABLE_REPAINT_DEBUGGING
-    // enabling this code will fill all areas that get repainted with a colour overlay, to show
-    // clearly when things are being repainted.
-    g.restoreState();
-
-    static Random rng;
-
-    g.fillAll (Colour ((uint8) rng.nextInt (255),
-                       (uint8) rng.nextInt (255),
-                       (uint8) rng.nextInt (255),
-                       (uint8) 0x50));
+  #if JUCE_ENABLE_REPAINT_DEBUGGING
+   #ifdef JUCE_IS_REPAINT_DEBUGGING_ACTIVE
+    if (JUCE_IS_REPAINT_DEBUGGING_ACTIVE)
    #endif
+    {
+        // enabling this code will fill all areas that get repainted with a colour overlay, to show
+        // clearly when things are being repainted.
+        g.restoreState();
+
+        static Random rng;
+
+        g.fillAll (Colour ((uint8) rng.nextInt (255),
+                           (uint8) rng.nextInt (255),
+                           (uint8) rng.nextInt (255),
+                           (uint8) 0x50));
+    }
+  #endif
 
     /** If this fails, it's probably be because your CPU floating-point precision mode has
         been set to low.. This setting is sometimes changed by things like Direct3D, and can
@@ -298,15 +310,11 @@ void ComponentPeer::handleMovedOrResized()
         Rectangle<int> newBounds (Component::ComponentHelpers::rawPeerPositionToLocal (component, getBounds()));
         Rectangle<int> oldBounds (component.getBounds());
 
-//        oldBounds = Component::ComponentHelpers::localPositionToRawPeerPos (component, oldBounds);
-
         const bool wasMoved   = (oldBounds.getPosition() != newBounds.getPosition());
         const bool wasResized = (oldBounds.getWidth() != newBounds.getWidth() || oldBounds.getHeight() != newBounds.getHeight());
 
         if (wasMoved || wasResized)
         {
-//            newBounds = Component::ComponentHelpers::rawPeerPositionToLocal (component, newBounds);
-
             component.bounds = newBounds;
 
             if (wasResized)
@@ -390,6 +398,9 @@ const Rectangle<int>& ComponentPeer::getNonFullScreenBounds() const noexcept
 {
     return lastNonFullscreenBounds;
 }
+
+Point<int> ComponentPeer::localToGlobal (Point<int> p)   { return localToGlobal (p.toFloat()).roundToInt(); }
+Point<int> ComponentPeer::globalToLocal (Point<int> p)   { return globalToLocal (p.toFloat()).roundToInt(); }
 
 Rectangle<int> ComponentPeer::localToGlobal (const Rectangle<int>& relativePosition)
 {

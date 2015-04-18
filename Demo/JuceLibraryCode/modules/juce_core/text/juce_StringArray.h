@@ -134,18 +134,12 @@ public:
     /** Returns a pointer to the first String in the array.
         This method is provided for compatibility with standard C++ iteration mechanisms.
     */
-    inline String* begin() const noexcept
-    {
-        return strings.begin();
-    }
+    inline String* begin() const noexcept       { return strings.begin(); }
 
     /** Returns a pointer to the String which follows the last element in the array.
         This method is provided for compatibility with standard C++ iteration mechanisms.
     */
-    inline String* end() const noexcept
-    {
-        return strings.end();
-    }
+    inline String* end() const noexcept         { return strings.end(); }
 
     /** Searches for a string in the array.
 
@@ -189,7 +183,6 @@ public:
     void insert (int index, const String& stringToAdd);
 
     /** Adds a string to the array as long as it's not already in there.
-
         The search can optionally be case-insensitive.
     */
     void addIfNotAlreadyThere (const String& stringToAdd, bool ignoreCase = false);
@@ -325,7 +318,6 @@ public:
     void removeDuplicates (bool ignoreCase);
 
     /** Removes empty strings from the array.
-
         @param removeWhitespaceStrings  if true, strings that only contain whitespace
                                         characters will also be removed
     */
@@ -389,10 +381,15 @@ public:
 
     //==============================================================================
     /** Sorts the array into alphabetical order.
-
         @param ignoreCase       if true, the comparisons used will be case-sensitive.
     */
     void sort (bool ignoreCase);
+
+    /** Sorts the array using extra language-aware rules to do a better job of comparing
+        words containing spaces and numbers.
+        @see String::compareNatural()
+    */
+    void sortNatural();
 
     //==============================================================================
     /** Increases the array's internal storage to hold a minimum number of elements.
@@ -411,11 +408,12 @@ public:
     */
     void minimiseStorageOverheads();
 
-
-private:
-    //==============================================================================
+    /** This is the array holding the actual strings. This is public to allow direct access
+        to array methods that may not already be provided by the StringArray class.
+    */
     Array<String> strings;
 
+private:
     JUCE_LEAK_DETECTOR (StringArray)
 };
 

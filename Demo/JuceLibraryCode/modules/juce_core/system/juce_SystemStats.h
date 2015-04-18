@@ -47,26 +47,29 @@ public:
     /** The set of possible results of the getOperatingSystemType() method. */
     enum OperatingSystemType
     {
-        UnknownOS   = 0,
+        UnknownOS    = 0,
 
-        Linux       = 0x2000,
-        Android     = 0x3000,
-        iOS         = 0x8000,
+        Linux        = 0x2000,
+        Android      = 0x3000,
+        iOS          = 0x8000,
 
-        MacOSX_10_4 = 0x1004,
-        MacOSX_10_5 = 0x1005,
-        MacOSX_10_6 = 0x1006,
-        MacOSX_10_7 = 0x1007,
-        MacOSX_10_8 = 0x1008,
+        MacOSX_10_4  = 0x1004,
+        MacOSX_10_5  = 0x1005,
+        MacOSX_10_6  = 0x1006,
+        MacOSX_10_7  = 0x1007,
+        MacOSX_10_8  = 0x1008,
+        MacOSX_10_9  = 0x1009,
+        MacOSX_10_10 = 0x100a,
 
-        Win2000     = 0x4105,
-        WinXP       = 0x4106,
-        WinVista    = 0x4107,
-        Windows7    = 0x4108,
-        Windows8    = 0x4109,
+        Win2000      = 0x4105,
+        WinXP        = 0x4106,
+        WinVista     = 0x4107,
+        Windows7     = 0x4108,
+        Windows8_0   = 0x4109,
+        Windows8_1   = 0x410a,
 
-        Windows     = 0x4000,   /**< To test whether any version of Windows is running,
-                                     you can use the expression ((getOperatingSystemType() & Windows) != 0). */
+        Windows      = 0x4000,   /**< To test whether any version of Windows is running,
+                                      you can use the expression ((getOperatingSystemType() & Windows) != 0). */
     };
 
     /** Returns the type of operating system we're running on.
@@ -83,8 +86,7 @@ public:
     */
     static String getOperatingSystemName();
 
-    /** Returns true if the OS is 64-bit, or false for a 32-bit OS.
-    */
+    /** Returns true if the OS is 64-bit, or false for a 32-bit OS. */
     static bool isOperatingSystem64Bit();
 
     /** Returns an environment variable.
@@ -118,9 +120,17 @@ public:
     static String getUserRegion();
 
     /** Returns the user's display language.
-        The return value is a 2 or 3 letter language code (ISO 639-1 or ISO 639-2)
+        The return value is a 2 or 3 letter language code (ISO 639-1 or ISO 639-2).
+        Note that depending on the OS and region, this may also be followed by a dash
+        and a sub-region code, e.g "en-GB"
     */
     static String getDisplayLanguage();
+
+    /** This will attempt to return some kind of string describing the device.
+        If no description is available, it'll just return an empty string. You may
+        want to use this for things like determining the type of phone/iPad, etc.
+    */
+    static String getDeviceDescription();
 
     //==============================================================================
     // CPU and memory information..

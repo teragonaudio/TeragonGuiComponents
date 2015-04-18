@@ -179,6 +179,16 @@ namespace AndroidStatsHelpers
                                                                                           JuceAppActivity.getLocaleValue,
                                                                                           isRegion)));
     }
+
+    #define JNI_CLASS_MEMBERS(METHOD, STATICMETHOD, FIELD, STATICFIELD)
+    DECLARE_JNI_CLASS (BuildClass, "android/os/Build");
+    #undef JNI_CLASS_MEMBERS
+
+    String getAndroidOsBuildValue (const char* fieldName)
+    {
+        return juceString (LocalRef<jstring> ((jstring) getEnv()->GetStaticObjectField (
+                            BuildClass, getEnv()->GetStaticFieldID (BuildClass, fieldName, "Ljava/lang/String;"))));
+    }
 }
 
 //==============================================================================
@@ -190,6 +200,12 @@ SystemStats::OperatingSystemType SystemStats::getOperatingSystemType()
 String SystemStats::getOperatingSystemName()
 {
     return "Android " + AndroidStatsHelpers::getSystemProperty ("os.version");
+}
+
+String SystemStats::getDeviceDescription()
+{
+    return AndroidStatsHelpers::getAndroidOsBuildValue ("MODEL")
+            + "-" + AndroidStatsHelpers::getAndroidOsBuildValue ("SERIAL");
 }
 
 bool SystemStats::isOperatingSystem64Bit()
@@ -257,12 +273,12 @@ String SystemStats::getComputerName()
 
 String SystemStats::getUserLanguage()    { return AndroidStatsHelpers::getLocaleValue (false); }
 String SystemStats::getUserRegion()      { return AndroidStatsHelpers::getLocaleValue (true); }
-String SystemStats::getDisplayLanguage() { return getUserLanguage(); }
+String SystemStats::getDisplayLanguage() { return getUserLanguage() + "-" + getUserRegion(); }
 
 //==============================================================================
 void CPUInformation::initialise() noexcept
 {
-    numCpus = jmax (1, sysconf (_SC_NPROCESSORS_ONLN));
+    numCpus = jmax (1, (int) sysconf (_SC_NPROCESSORS_ONLN));
 }
 
 //==============================================================================
