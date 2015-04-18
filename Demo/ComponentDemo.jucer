@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="W5chp0" name="ComponentDemo" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.teragonaudio.ComponentDemo" includeBinaryInAppConfig="1"
-              jucerVersion="3.1.0" companyName="Teragon Audio">
+              jucerVersion="3.1.1" companyName="Teragon Audio">
   <MAINGROUP id="qYaJjs" name="ComponentDemo">
     <GROUP id="{C4B81606-7B4D-4044-AF8A-576806DF30F0}" name="PluginParameters">
       <GROUP id="{E95A21B7-A41E-7C3D-B3E9-440BD6B7BB3E}" name="include">
